@@ -7,4 +7,4 @@ class Room:
         self.description = description
 
     def __str__(self):
-        return f"stand tall as you are {self.name}, {self.description}. Prove yourself worthy!"
+        return f"{self.name}, {self.description}"

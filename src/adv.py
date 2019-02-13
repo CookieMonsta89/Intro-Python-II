@@ -38,14 +38,43 @@ room['treasure'].s_to = room['narrow']
 #
 
 # Make a new player object that is currently in the 'outside' room.
-# set current location to outside
+    # set current location to outside
 currentLocation = room['outside']
-# allows user to input their name
+    # allows user to input their name
 name = input('What do you call yourself?\n')
-# displays users name
-player = Player(name)
+    # displays users name
+player = Player(name, currentLocation, None)
 
-description = print(f"I've heard a lot about you {player.name}. You are currently in {currentLocation}")
+def description(param):
+    print(f"\nI've heard a lot about you {player.name}. {currentLocation}")
+
+playerDirection = ''
+
+playerDirection = input("What direction should we go?\n"
+        "N for North, S for South, E for East or W for West")
+
+if playerDirection == "N" or playerDirection == "S" or playerDirection == "E" or playerDirection == "W" or playerDirection == "Q" or playerDirection == "q":
+    try:
+        if playerDirection == "N":
+            nextDirection = currentLocation.n_to
+        if playerDirection == "S":
+            nextDirection = currentLocation.s_to
+        if playerDirection == "E":
+            nextDirection = currentLocation.e_to
+        if playerDirection == "W":
+            nextDirection = currentLocation.w_to
+    except AttributeError:
+        print("You can't go that way!!")
+        currentLocation = room['outside']
+        playerDirection = input("So please choose either N, S, E, W or you can quit like a quitter and hit q\n")
+            
+    if nextDirection: currentLocation = nextDirection
+
+    else:
+        print("Wrong input idiot. Please use N, S, E, W")
+        playerDirection = input("Will you please use N, S, E, W. You are driving me insane")
+
+
 
 # Write a loop that:
 #
