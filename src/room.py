@@ -2,9 +2,9 @@
 # description attributes.
 
 class Room:
-    def __init__(self, room):
-        self.room = room
+    def __init__(self, name, description):
+        self.name = name
+        self.description = description
 
-    def speak(self, room):
-        if room == outside 
-        print(f"Outside Cave Entrance","North of you, the cave mount beckons")
+    def __str__(self):
+        return f"stand tall as you are {self.name}, {self.description}. Prove yourself worthy!"

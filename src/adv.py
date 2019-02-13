@@ -1,10 +1,10 @@
 from room import Room
-
+from player import Player
 # Declare all the rooms
 
 room = {
-    'outside':  Room("Outside Cave Entrance",
-                     "North of you, the cave mount beckons"),
+    'outside':  Room("You are outside Cave Entrance",
+                     "North of you, the cave mounth beckons for you."),
 
     'foyer':    Room("Foyer", """Dim light filters in from the south. Dusty
 passages run north and east."""),
@@ -38,6 +38,14 @@ room['treasure'].s_to = room['narrow']
 #
 
 # Make a new player object that is currently in the 'outside' room.
+# set current location to outside
+currentLocation = room['outside']
+# allows user to input their name
+name = input('What do you call yourself?\n')
+# displays users name
+player = Player(name)
+
+description = print(f"I've heard a lot about you {player.name}. You are currently in {currentLocation}")
 
 # Write a loop that:
 #
