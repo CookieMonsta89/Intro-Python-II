@@ -1,10 +1,14 @@
 from room import Room
 from player import Player
+from item import Item
+from colorama import init
+init()
 # Declare all the rooms
 
 room = {
     'outside':  Room("You are outside Cave Entrance",
-                     "North of you, the cave mounth beckons for you."),
+                     "North of you, the cave mouth beckons for you.", ['hatchet', 'pipe', 'taco']),   
+               
 
     'foyer':    Room("Foyer", """Dim light filters in from the south. Dusty
 passages run north and east."""),
@@ -19,6 +23,10 @@ to north. The smell of gold permeates the air."""),
     'treasure': Room("Treasure Chamber", """You've found the long-lost treasure
 chamber! Sadly, it has already been completely emptied by
 earlier adventurers. The only exit is to the south."""),
+}
+
+item = {
+    'hatchet': Item('hatchet', 'rusty')
 }
 
 
@@ -39,42 +47,13 @@ room['treasure'].s_to = room['narrow']
 
 # Make a new player object that is currently in the 'outside' room.
     # set current location to outside
-currentLocation = room['outside']
-    # allows user to input their name
-name = input('What do you call yourself?\n')
-    # displays users name
-player = Player(name, currentLocation, None)
-
-def description(param):
-    print(f"\nI've heard a lot about you {player.name}. {currentLocation}")
-
-playerDirection = ''
-
-playerDirection = input("What direction should we go?\n"
-        "N for North, S for South, E for East or W for West")
-
-if playerDirection == "N" or playerDirection == "S" or playerDirection == "E" or playerDirection == "W" or playerDirection == "Q" or playerDirection == "q":
-    try:
-        if playerDirection == "N":
-            nextDirection = currentLocation.n_to
-        if playerDirection == "S":
-            nextDirection = currentLocation.s_to
-        if playerDirection == "E":
-            nextDirection = currentLocation.e_to
-        if playerDirection == "W":
-            nextDirection = currentLocation.w_to
-    except AttributeError:
-        print("You can't go that way!!")
-        currentLocation = room['outside']
-        playerDirection = input("So please choose either N, S, E, W or you can quit like a quitter and hit q\n")
-            
-    if nextDirection: currentLocation = nextDirection
-
-    else:
-        print("Wrong input idiot. Please use N, S, E, W")
-        playerDirection = input("Will you please use N, S, E, W. You are driving me insane")
 
 
+player = Player("Joe", room['outside'])
+
+print('\33[93m' + str(player) + '\33[0m')
+
+currentRoom = room['outside']
 
 # Write a loop that:
 #
@@ -86,3 +65,37 @@ if playerDirection == "N" or playerDirection == "S" or playerDirection == "E" or
 # Print an error message if the movement isn't allowed.
 #
 # If the user enters "q", quit the game.
+player_input = None
+
+backpack = ('\33[92m' + 'Backpack:' + '\33[0m')
+location = ('\33[92m' + 'Location:' + '\33[0m')
+itemsinroom = ('\33[92m' + 'Items in room:' + '\33[0m')
+descriptionofroom = ('\33[92m' + 'Description:' + '\33[0m')
+directionchoice = ('\33[94m' + 'north, south, east, west' + '\33[0m')
+
+while (player_input is not 'q'):
+    print(f"{backpack} {player.items}\n{location} {player.currentRoom.name}\n{descriptionofroom} {player.currentRoom.description}\n{itemsinroom} {player.currentRoom.items}.\nPlease pick a direction to go in ({directionchoice}).\nOr you can pick up an item using (p) or 'get itemname'")
+    player_input = input("Enter the direction you'd like to go or grab an item:")
+    previous_room = player.currentRoom
+    if player_input != "p" and player_input != "r":
+        player.move(player_input)
+    if player_input.startswith("go ") or player_input.startswith("move "):
+        direction = player_input.split(' ')
+        player.move(direction[1])
+    if player_input.startswith("get ") or player_input.startswith("grab ") or player_input.startswith("pickup "):
+        items = player_input.split(' ')
+        player.pickup(items[1])
+    if player_input.startswith("drop "):
+        items = player_input.split(' ')
+        player.drop(items[1])
+    elif player_input == 'p':
+        player_input = input("what you wanna grab?")
+        player.pickup(player_input)
+    elif player_input == 'r':
+        player_input = input("What you wanna drop?")
+        player.drop(player_input)
+    if player.currentRoom == None:
+        print("You can't do that idiot!")
+        player.currentRoom = previous_room
+    
+
